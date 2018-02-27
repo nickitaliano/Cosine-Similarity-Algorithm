@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Oct 25 13:51:20 2016
+
+@authors: Nicholas Italiano ad John Tomici
+"""
+
+"""
+# Clear Variables
+# "%reset" in console before running each time
+"""
+
+import math	 # math library functions
+from collections import Counter # frequency counter
+import os 
+import subprocess as sp
+
+# Set cwd
+cwd = os.getcwd()
+os.chdir("/Users/NMAI/Desktop/NetBeansProjects")
+    
+# Input text data from specified document for (2) .txt's being compared 
+#(encoding and error handling ensures no errors in input)
+t1 = open('doc1.txt', 'r',encoding='utf8', errors='replace')#function designated for frequency
+textwords1=t1.read().split()
+t2 = open('doc2.txt', 'r',encoding='utf8', errors='replace')
+textwords2=t2.read().split()
+stopwords = open('stopWords.txt', 'r').read().split()
+
+# Remove stopwords using list comprehension and stopword's
+resultwords1  = [word for word in textwords1 if word.lower() not in stopwords]
+resultwords2  = [word for word in textwords2 if word.lower() not in stopwords]
+
+# count word occurrences/frequency using Counter
+r1 = Counter(resultwords1)
+r2 = Counter(resultwords2)
+
+# Convert to word-vectors
+words  = list(r1.keys() | r2.keys())
+r1_vect = [r1.get(word, 0) for word in words]        
+r2_vect = [r2.get(word, 0) for word in words]        
+
+# find cosine similarity measure for two paired lists
+len_r1  = sum(av*av for av in r1_vect) ** 0.5             
+len_r2  = sum(bv*bv for bv in r2_vect) ** 0.5             
+dot    = sum(av*bv for av,bv in zip(a_vect, b_vect))    
+cosinesim = dot / (len_r1 * len_r2) 
+print(cosinesim)
+
+
+# Note: The code below determines the top 10 most frequent words in a single.txt
+# Use Counter to return object of ('K',V) pairs
+tenmostfreq=Counter(resultwords1).most_common(10)
+print(tenmostfreq)
+
