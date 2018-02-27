@@ -1,0 +1,129 @@
+Dissimilarities in the Logical Modeling of Apparently Similar Concepts in SNOMED CT
+Ankur Agrawal, BE, Gai Elhanan, MD, Michael Halper, PhD
+New Jersey Institute of Technology, Newark, NJ
+
+ 
+Abstract
+Concepts whose terms are of a similar word structure are expected to have similar logical representations. Anecdotal examples from SNOMED CT indicate that this may not always be the case. An investigation into the extent of inconsistent modeling in SNOMED CT hierarchies is carried out. A lexical methodology is used to identify sets of similar concepts. It is applied to one of the most attribute-rich hierarchies, Procedure, from which a random sample of 60 sets is derived.  These sets are examined in regard to hierarchical, definitional, attribute, attribute/value, and role-group aspects. Thirty percent of the sample sets were found to have at least one type of modeling inconsistency. Their presence may interfere with the performance of terminology-driven applications. With the use of SNOMED expanding, such inconsistencies may eventually affect clinical care. Due to this, external auditing should be encouraged to identify such issues and complement IHTSDO’s efforts.
+Introduction
+SNOMED CT (SCT) is a comprehensive and complex terminology [1]. In the past decade, SCT gained recognition as a premier clinical terminology through endorsements from many national and international organizations. The most commonly perceived use of terminologies such as SCT is the encoding of clinical data within electronic medical systems including Electronic Health Records (EHRs) and Clinical Information Systems (CISs). Encoding by standards like SCT is essential for sharable and transferrable medical data. However, SCT offers significantly more than the ability to search for medical terms and translate them into codes. It is built upon description logic (DL) principles [2], with each concept being defined by its hierarchical (IS-A) and lateral (attribute) relationships to other concepts in the terminology. 
+From a clinical perspective, particularly from the point of view of human clinicians, the presentation format of concepts in the form of terms (e.g., fully-specified names and preferred names) is often of primary concern. On the other hand, computer programs—particularly those performing some kind of reasoning—are built around the concepts’ DL formulations. One would expect that these two perspectives be highly consistent. In particular, terms exhibiting a similar word structure should have underlying DL modeling that is analogous in structure, too.
+Past research (e.g., [3]) has identified instances of   inconsistent modeling in SCT. Such inconsistencies may be perceived to have minimal implications regarding clinical coding. However, inconsistencies may significantly affect the performance of reasoners and inference generation (e.g., in the context of error detection and decision support) as these explicitly rely on the completeness and consistency of formal definitions. Therefore, in this paper we analyze the conceptual representation of sets of concepts similar at the term-level in an attempt to characterize the consistency of the modeling across these concepts. Sets of concepts with similar terms are gathered through standard lexical techniques. Such an analysis is performed on SCT’s Procedure hierarchy, one with a rich collection of attributes.
+Background
+In SNOMED CT, the logical modeling of concepts should have a consistency commensurate with that of the concepts’ presentations in the form of terms. SCT’s concepts are defined in the context of DL through their relationships to other concepts. The relationships come in two varieties: subsumption (IS-A) and attribute relationship. Each concept, except for SCT’s overall root, has at least one IS-A to another concept called its parent. Collectively, the IS-As impose a hierarchical structure on SCT, with general concepts at the top and more specific concepts below. SCT concepts are organized into a collection of 19 top-level hierarchies, including Clinical finding, Procedure, Body Structure, etc.
+Attribute relationships (simply “attributes” from hereon) capture the “lateral” knowledge of SCT. For example, the attribute finding site connects Fracture of tarsal bone to Bone structure of tarsus, conveying the knowledge that a fracture of the tarsal bone involves that particular bone structure and not another. SCT’s technical documentation outlines well defined rules for the domains and ranges of its defining attributes and attribute values [4]. Each concept is further classified by its status of logical definition: fully-defined vs. primitive. A primitive concept is underspecified in the sense of not having enough attributes to distinguish it from its parents (and siblings) and not allowing for the automated detection of its sub-concepts.
+The Procedure hierarchy of SCT has a set of 28 potential defining attributes [4] (Table 1). For most attribute domains, SCT defines one or more ranges from which target values can be assigned. For example, the attribute component can be assigned target values from four ranges (Table 2). Furthermore, SCT allows multiple attributes and their values to be grouped together to create what are called “role-groups.” These role-groups combine multiple attribute/value pairs to create specific associations between appropriately relevant target concepts, thus enhancing the precision of definitions. While mostly used in the Procedure and Clinical finding hierarchies, they are not limited to these roots.
+
+Table 1: Defining attributes for Procedure hierarchy
+access	has intent	procedure device	revision status
+approach	has specimen	procedure morphology	scale type
+component	indirect device	procedure site	time aspect
+direct device	indirect morphology	procedure site - direct	using device
+direct morphology	measurement method	procedure site - indirect	using access device
+direct substance	method	property	using energy
+has focus	priority	recipient category	using substances
+
+Table 2: Ranges for the component attribute
+Cell structure (cell structure)
+Observable entity (observable entity)
+Organism (organism)
+Substance (substance)
+
+Thus, SCT contains a vast semantic network of more than 310,000 active concepts (Jan. 2010) and more than 1.4 million relationships between them. SCT’s DL underpinnings can be used by DL classifiers to ensure internal consistency. SCT has two main views: a stated, explicit view and the commonly available inferred view which is derived by a DL classifier. The same SCT infrastructure also supports semantic reasoners. Inferences that can be derived by reasoners can form the basis for sophisticated decision-support tools and applications. However, the performance of classifiers and reasoners is directly related to the completeness and correctness of the logical formalism on which they rely. 
+Our research group, the Structural Analysis of Biomedical Ontologies Center (SABOC) [5], has been formulating automated structural methodologies to detect concepts that are likely to contain errors, as part of an effort to make terminology auditing more efficient [6]. Such methodologies have been successfully applied to SCT [3,6]. During the application of these methodologies, situations have been observed where concepts that were similar in every aspect but one, were not modeled in the same manner. For example, while Insertion of Kantrowitz heart pump has the attribute direct device with a value of Cardiac assist implant (January 2010 release), its sibling Removal of Kantrowitz heart pump has direct device with a value of Device, a very broad concept. Other hierarchical differences were noted as well.
+Our analysis thus focuses on both parts of SCT’s definitional structures: hierarchical (i.e., IS-As) and attributes. The latter aspect can be further segmented (see “Methods”). The comparison between the modeling of apparently similar concepts in concentrates on both these aspects.
+Methods
+The analysis begins with the formation of groups of concepts whose fully specified names (FSNs) are similar in their word structure. In particular, the focus is on FSNs that differ from each other by one word. Such groups are referred to as similarity sets (simply “sets,” for short). For example, let t1 and t2 be five-word FSNs with t1 = “w1 w2 w3 w4 w5” and t2 = “w1 w6 w3 w4 w5”, where each wi is an individual word. Then the concepts of t1 and t2 are in a set together because these FSNs differ only in the second word: w2 versus w6. Standard lexical variations as well as stop-words (like “a,” “an,” “the”) are ignored. Based on preliminary results and for practical reasons, the analysis was limited to FSNs of five words or more, with the semantic tags included in the word count. An example set of three concepts (with terms of length five) is shown in Table 3. The hyphenated “Sperm-cervical” is considered one word.
+A program was implemented to carry out the identification of all sets. It was executed on all top-level hierarchies of SCT (Jan. 2010). Only concepts with current status were considered for evaluation. The Procedure hierarchy was selected for further analysis based on the hypothesis that due to its complexity and rich semantics (i.e., wide range of attributes) it might be more prone to modeling errors than hierarchies with less complexity.
+
+Table 3: Example of a set containing three concepts
+CID	FSN
+252940006
+252942003
+252943008	Sperm-cervical mucus interaction test (procedure)
+Sperm-cervical mucus slide test (procedure)      
+Sperm-cervical mucus contact test (procedure)
+ 
+
+
+ 
+Table 4: Set information per hierarchy
+Hierarchy	# concepts	#  IS-As	#  sets	Largest set	Median	Avg # concepts per set
+Body Structure	31,094	46,348	4,061	130	2	3.7
+Environment	1,711	1,741	36	21	2	3.2
+Event	3,645	3,726	185	24	2	2.6
+Finding	96,783	160,263	6,952	182	2	3.1
+Linkage	1,136	1,135	5	3	2	2.2
+Observable	8,017	8,462	1173	67	2	3.1
+Organism	32,002	33,271	578	131	2	4.9
+Physical Force	171	181	13	9	2	2.8
+Physical Object	4,433	4,805	770	36	2	3.1
+Procedure	51,311	94,813	3,124	61	2	3.0
+Product	16,989	24,583	2,493	38	2	3.0
+Qualifier	8,945	9,688	627	228	2	4.0
+Record	199	200	9	3	2	2.1
+Situation	3,066	3,483	226	15	2	2.9
+Social	4,794	5,570	158	18	2	2.9
+Special	784	783	77	136	3	5.8
+Specimen	1,238	2,115	38	11	2	2.7
+Staging	1,196	1,196	110	28	2	2.7
+Substance	23,701	29,244	1,223	687	2	3.9
+
+ 
+Of all the sets identified by the program for the Procedure hierarchy, 60 were randomly selected for analysis. The default interface setting of CliniClue Xplore (CIC Ltd, SCT January 2010 release) was used for the presentation of concepts for evaluation. The evaluation focused on: issues with parents, missing/extra attributes, attribute/value issues, missing/extra role-groups, and definitional status. A single terminology domain expert performed all evaluations.
+Results
+For the Procedure hierarchy, containing 51,311 concepts, 3,124 sets were identified. These sets comprised approximately 20% of the concepts in the hierarchy. Of these, the largest contained 61 concepts. The median set size was two, while the average was 3.0. Table 4 summarizes the results of the analysis of all 19 SCT hierarchies, Procedure highlighted.
+Sixty of the Procedure hierarchy’s 3,124 sets were randomly selected for an internal evaluation of their constituent concepts’ logical modeling. The 60 sets contained a total of 204 concepts, with an average set size of 3.4. The size ranged from two to 17 concepts. Of the 204 concepts analyzed, 22.1% were fully-defined, and 82% were leaf-nodes (i.e., concepts without children). (Overall, 39.2% of Procedure’s concepts are fully-defined and 75% are leaf-nodes.) 
+
+Table 5: Distribution (%) of under-defined (UD) and leaf-node (LN) concepts
+	UD	LN 	UD + LN	non-LN	UD + non-LN
+Procedure	61	75	68	25	40
+Random sample	78	82	91	18	51
+
+Table 5 shows the distribution of the fully- and under-defined concepts between leaf-nodes and non-leaves in the random sample of concepts and the overall Procedure hierarchy.
+One of the authors (GE), an MD with extensive terminology training and experience, performed the evaluation. Occurrences of the five kinds of modeling inconsistencies were discovered in the analysis of the sets. These were: hierarchical discrepancies, level of definition, assignment of attributes, attribute/value pairs, and role groups.
+The following example illustrates some of the issues summarized above. It involves a set containing five concepts, three of which are Primary cemented total ankle replacement, Primary cemented total hip replacement, and Primary cemented total knee replacement (Figure 1). A hierarchical discrepancy can be seen in the fact that although the three procedures differ only in the joint involved, each is anchored to a conceptually different sub-hierarchy parent(s). The first has the parent Prosthetic cemented total ankle replacement, the second has Insertion of hip prosthesis, total, and the third has the two parents Arthroplasty of knee and Implantation of joint prosthesis into knee joint. Of the four role-groups utilized in the modeling of the three concepts, none comprises the exact same set of attributes. While the rationale for the two different role-groups for the knee replacement procedure is most likely explained by inheritance from its two parents, none of the parents has the identical role- groups, and they are clearly inconsistent with the modeling of the hip and ankle procedures. Attribute/
+ 
+ 
+Figure 1: Three concepts (out of a set of five) depicting modeling inconsistencies
+
+ 
+value discrepancies can be seen for the attribute method which has the three different target values: Replacement – action, Surgical insertion – action, and Repair – action. The using device attribute is present only for the ankle procedure although it should apply to all procedures due to their nature. The definitional status of the ankle procedure is primitive (underspecified), while the knee and hip procedures are fully-defined. It is not clear that the presence of the direct device and procedure site - indirect attributes for the knee and hip procedures truly fully defines them. (Note that not all inconsistencies present in this example set have been discussed.)
+
+Table 6: Summary of findings on the sample sets
+	#	%
+Sets	60	
+Concepts	204	
+Fully-defined concepts	45	22
+Sets with modeling inconsistencies	18	30
+Types of inconsistencies:		
+Assignment of attributes	10	17
+Role groups	3	5
+Attribute/value pairs	9	15
+Hierarchical	17	28
+Level of definition	4	7
+
+Table 6 summarizes findings related to the sample set. Overall, 30% (18 out of 60) of the sets had at least one kind of an inconsistency. Out of the sets with inconsistencies, 10 out of 18 had two types of inconsistencies, four had three, one set had five and three sets had only one inconsistency type.
+Discussion
+Terminologies, such as SCT, emphasize conceptual definitions over textual definitions. SCT itself does not contain any textual definitions for its concepts, and fully relies on its DL definitions. Thus, it might be surprising to note that in the Procedure hierarchy, one of the more semantically complex in SCT, more than 60% of concepts are primitives (i.e., under-defined). This phenomenon, obviously, can be used to justify many of the findings of the present study. If concepts are under-defined, there is no guarantee that the modeling of similar concepts should even be the same; attributes and role-groups may differ. For most basic uses of a terminology, such as concept searches, coding, and subset extraction, this phenomenon may seem of small significance. However, when one considers that hierarchical aspects also play a part in conceptual definitions and that attribute and attribute/value assignments may affect even the most basic terminological queries, under-defined concepts may inflict significant practical damage. The ability of DL classifiers to operate is directly related to the robustness of the underlying logical formulations. Inconsistencies, as described in this work, combined with the fairly inexpressive logic underlying SCT, are bound to escape detection [7]. Moreover, the ability of reasoners and classifiers to detect other errors, properly classify, or draw other inferences is severely limited under such circumstances.
+Our study demonstrates that in our randomly selected sample from the Procedure hierarchy, modeling issues abound. Modeling inconsistencies were identified in 30% of the sample sets. We intentionally do not call these “errors,” since obviously there may be more than one way of modeling this type of knowledge and the degrees of freedom allowed by SCT are significant. However, consistency is essential for such complex structures, and these modeling inconsistencies clearly aggravate the situation. They affect both fully-defined and under-defined concepts within sets. Schulz et al. [8] also reported discrepancies between the defined semantics and the intuitive meaning of SCT concepts as well as other inconsistencies. 
+Our sample contained less fully-defined concepts (22%) than found in the overall Procedure hierarchy. Sample sets also had relatively more under-defined leaf-node concepts (91%). This may contribute to a higher rate of identified issues in our sample than in the general Procedure population. Nevertheless, the issues identified seem general and ingrained in the hierarchy. In our investigation, we used a minimum threshold of five words per FSN. Increasing that threshold would likely increase specificity, while reducing it would likely increase sensitivity.
+Overall, a large portion of leaf-nodes in SCT are under-defined and, based on the findings of this study, may be inconsistently modeled. These two issues operate synergistically to reduce the effectiveness of DL classifiers, reasoners, or other terminologically-driven applications [9,10]. Due to SCT’s sheer size, it is unreasonable, at this time, to expect a quick remedy for such a widely spread phenomenon. However, preventive measures are more effective than corrective ones. In the future, we suggest that lexical methods be used more extensively in SCT’s editing process. Such methods can efficiently detect potential modeling inconsistencies and help prevent them before they are introduced into new releases. Since such inconsistencies tend to affect multiple concepts, in time, their number will be reduced. We also expect that algorithmic methodologies can be developed to suggest possible enhancements, corrections, and further extensions to SCT’s logical structure [11].
+Since the study was limited to a sample of 60 sets and the nature of the inconsistencies was not necessarily known in advance, we relied on manual detection. However, as our results indicate, there are classes of inconsistencies that can easily be identified algorithmically. Going forward we plan to utilize such algorithmic detection.
+This work also emphasizes the importance of external auditing of such large bodies of knowledge. As SCT’s use expands, the significance and implications of such “imperfections” will only increase. Eventually, these are bound to manifest themselves in patient care. While the emphasis during the last decade was mostly on expanding content coverage, more effort should now be applied to quality assurance. This is too big an effort to be solely tasked to the IHTSDO or third-party entities. Only a collaborative, open process can ensure, under the umbrella of the IHTSDO, effective results.
+Conclusions
+The Procedure hierarchy of SCT exhibits various significant modeling inconsistencies. Based on additional preliminary studies, we have reason to believe that other attribute-rich hierarchies may exhibit similar issues. Such inconsistencies cannot be detected strictly by DL classifiers and may propagate to affect clinical care. Lexical methods can help detect such inconsistencies during the editing process, thus preventing their inclusion in new releases. As SNOMED CT becomes more prevalent in the clinical care domain, it is time to step up the auditing effort. 
+Acknowledgment
+This work was partially supported by the NLM under grant R-01-LM008912-01A1.
+References
+1.	SNOMED CT: http://www.ihtsdo.org/snomed-ct.
+2.	Spackman KA, et al. Role grouping as an extension to the description logic of Ontylog, motivated by concept modeling in SNOMED. Proc AMIA Symp 2000:712–6.
+3.	Wei D et al. Auditing SNOMED relationships using a converse abstraction network. Proc AMIA Symp 2009:685–9. 
+4.	IHTSDO: SNOMED Clinical Terms Technical Reference Guide, July 2008 International Release.
+5.	SABOC:http://www.cis.njit.edu/~oohvr/SABOC/aboutus.html.
+6.	Wang Y, Halper M, Min H, Perl Y, Chen Y, Spackman KA. Structural methodologies for auditing SNOMED. J Biomed Inform. 2007 Oct;40(5):561–81.
+7.	Wei D, Bodenreider O. Using the abstraction network in complement to description logics for quality assurance in biomedical terminologies - a case study in SNOMED CT. To appear in MedInfo 2010.
+8.	Schulz S, Hanser S, Hahn U, Rogers J. The semantics of procedures and diseases in SNOMED CT. Methods Inf Med. 2006;45(4):354–8.
+9.	Elhanan G, Cimino JJ. Controlled vocabulary and design of laboratory results displays. Proc AMIA Annu Fall Symp. 1997:719–23.
+10.	Cimino JJ, Elhanan G, Zeng Q. Supporting Infobuttons with terminological knowledge. Proc AMIA Annu Fall Symp. 1997:528–32.
+11.	Pacheco E, Schulz S, Stenzhorn H, Paetzold J, Nohama P. Detection of underspecifications in SNOMED CT concept definitions using language processing. Proc AMIA Symp 2010:492–6.

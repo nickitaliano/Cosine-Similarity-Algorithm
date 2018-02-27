@@ -1,0 +1,399 @@
+Enhancing the Famous People Ontology
+by Mining a Social Network
+Soon Ae Chun
+City University of New York (CUNY)
+College of Staten Island (CSI)
+Staten Island, NY 10314
+US+718-982-2931
+Soon.Chun@csi.cuny.edu
+Tian Tian
+Manhattan College
+Department of Computer Science
+New York, NY 10471
+US+347-366-2987
+tina.tian7@gmail.com
+James Geller
+New Jersey Institute of Technology
+Department of Computer Science
+Newark, NJ 07102
+US+973-596-3383
+james.geller@gmail.com
+ABSTRACT
+The search terms that a user passes to a search engine are often
+ambiguous, referring to homonyms. The results in these cases are
+a mixture of links to documents that contain different meanings of
+the search terms. To improve the search for homonyms, we
+previously designed an Ontology-Supported Web Search System
+(OSWS) for “famous people.” To serve this system, we built an
+ontology of famous people based on mining the suggested
+completions of a search engine and on data from DBpedia. In this
+paper, we present an approach to improve the OSWS ontology by
+mining data from Facebook “people public pages.” Facebook
+attributes are cleaned up and mapped to the OSWS ontology.
+1. INTRODUCTION
+Search engines have become the universal catalogs for worldwide
+information resources. However, problems arise with the
+weaknesses of the current keyword-based search engines. The
+major search engines do not disambiguate homonymous search
+terms. The returned results contain mingled information of all
+homonyms and typically contain long lists of pages of hits [1]. To
+improve the Web search process with homonymous terms, the
+Ontology-Supported Web Search (OSWS) System was developed
+[2, 3]. The OSWS System provides users with greatly improved
+suggested completions that are separated from each other
+according to the different existing homonyms of a search term.
+We built an ontology of famous people for the OntologySupported
+Web Search system (OSWS) by retrieving the Google
+search suggestions and extracting information from DBpedia [4].
+Google search suggestions were mined to identify famous people.
+A list of those people was constructed, called the A-list [5]. The
+names in the list were then checked against DBpedia. If a famous
+person in the list exists in DBpedia, her DBpedia profile was
+analyzed and useful information was saved in the OSWS
+ontology. However, it was found that many names in our lists do
+not exist in DBpedia. For example, among the 5,286 names in the
+A-List, only 3,241 of them were identified in DBpedia.
+In this paper, we describe how Facebook [6] was used as a
+secondary resource to mine information about the famous people
+who are not in DBpedia. Over the past few years, Facebook has
+become the largest social network [7]. Research has been done on
+mining data from social networks. For example, Thelwall et al.
+have mined MySpace comments to detect the emotions expressed
+in them and to examine how they differ among users of different
+age and gender [8]. Chu et al. have mined Facebook live data
+concerning social networking forensics [9]. Xu et al. studied
+mining user opinions in social network services [10]. Numerous
+tools have been developed to mine social networks, e.g., SONAR
+[11] and POLYPHONET [12].
+One of the features of Facebook is the ability to create public
+pages. Public pages are for organizations, businesses and
+celebrities to broadcast information [13]. Different from common
+users, a Facebook public page can be “followed” and “liked” by
+its fans. Statistics show that “celebrities” is one of the most
+popular categories among pages, with more than one million fans.
+More and more famous people are using Facebook pages as a
+marketing tool. They fill out their profiles and regularly post new
+updates on their Facebook pages. The focus of this study is on
+techniques for mining the Facebook celebrity pages in order to
+increase the size of the OSWS ontology of famous people.
+2. EXTENDING OSWS USING FACEBOOK
+Every page in Facebook has a unique page ID. One can access the
+attributes of a page by invoking the Facebook Graph API [14]
+with the page ID. Thus, as long as the ID is known, all public
+information can be retrieved, including attributes like name,
+picture, birthday, description, etc. The most important attributes
+for the extension of the OSWS ontology are category and likes.
+Each Facebook page is associated with exactly one category. All
+Facebook person pages are under the broad category “person.”
+When creating a Facebook person page, there are 24 subcategories
+that can be selected. These include “musician/band,” “athlete,”
+“public figure,” etc. This information is useful to classify famous
+people, and we store it in our ontology. Figure 1 shows some of
+the person categories. Likes stores the number of users (fans) who
+like this page. In other words, it is a measure of the popularity of a
+celebrity. Michael Jackson is the most popular entity on
+Facebook, with more than 14 million fans [15]. Numerous
+applications have been built for tracking the numbers of “likes” of
+Facebook pages [16].
+Permission to make digital or hard copies of all or part of this work for
+personal or classroom use is granted without fee provided that copies are
+not made or distributed for profit or commercial advantage and that
+copies bear this notice and the full citation on the first page. To copy
+otherwise, to republish, to post on servers or to redistribute to lists,
+requires prior specific permission and/or a fee.
+SSW’12, August 27, 2012, Istanbul, Turkey.
+Copyright 2012 ACM 978-1-4503-2301-7/27/09 ...$15.00.
+2.1 Classification of Famous People
+It is possible to search over all public objects in the social graph
+of Facebook. For example, the following search returns the top 50
+Facebook pages having “Michael Jackson” in their name:
+https://graph.facebook.com/search?q=michael%20jackson&t
+ype=page&limit=50.
+The attribute-value pair “type=page” expresses the fact that it is
+intended to search only the public pages. Each returned result
+contains the name, ID, and category of the page (Figure 2). The
+first result is in most cases the official Facebook page of the
+famous person. However, several public pages may exist for the
+same person.
+!!!!!!!!!!!
+Figure 1. Some Facebook person categories Figure 2. Top five results of Facebook pages for query “Michael Jackson”
+Our study identified 2,564 names in the A-List that could not be
+found in DBpedia. We call this list the reduced-A-list. Because
+the first returned result may not be the official Facebook page
+when searching for a name, the top ten returned pages of each
+search were retrieved by our programs and API calls were made
+to extract detailed information about them. The page with the
+maximum number of likes was chosen, as it is assumed that most
+Facebook users go to the official Facebook pages only. Thus, the
+higher the number of “likes” of a page is, the more authoritative it
+may be. For example, there are two Facebook pages titled “John
+Lennon.” One has 4,795,634 likes, the other one only 1,189. Thus,
+the first page is more likely the official Facebook page.
+Of the 2,564 names in the reduced-A-list, 1,894 were found to
+have a Facebook page. By analyzing the categories of these pages,
+954 among them were found to be persons. Some of these pages
+have very few fans. It was necessary to define a threshold of
+“likes” to distinguish between famous people and people with
+many friends, as we are not interested in the latter.
+On average, a Facebook Page has 4,596 fans [15]; 4% of pages
+have more than 10,000 fans; 0.76% of pages have more than
+100,000 fans, and 0.05% of pages have more than a million fans
+(e.g., Michael Jackson) [15]. The median page has 218 fans,
+meaning that 50% of the pages have fewer than 218 fans [15].
+Looking for names that we recognized ourselves as famous, we
+determined 300 to be an acceptable minimum number of likes for
+a person to be included in the OSWS ontology as famous. Among
+the classified people in the reduced-A-list, 588 of them have over
+300 likes and were used for further data extraction. Finding a
+threshold in a more systematic way is an open problem.
+2.2 Extracting Attributes from Facebook
+Besides the common attributes of Facebook pages, they may
+contain other or additional category-specific attributes [17]. For
+example, pages of the “musician/band” category may have
+additional attributes like album, genre, record_label, etc. There
+are more than 30 different kinds of attributes among the 588
+selected people in the reduced-A-list. However, many of the
+attributes are of no use to serve the purpose of providing
+suggested completions for Web searches. Examples of “useless”
+attributes are id, username, link, picture, etc. Those fields are
+generally Facebook-centric and do not help in suggested
+completions. Note that the attribute picture could be useful,
+however, the current research does not include image processing.
+Moreover, many attributes are inconsistent and contain “bad”
+data. For example, description, bio and personal_info are
+supposed to hold valuable information about famous people.
+Since Facebook pages can be created by any user, however,
+values of those attributes are in many cases written in casual
+English, without a fixed format. Cleaning those attribute values
+would involve a great deal of work with Natural Language
+Processing tools, which is outside of the scope of this research.
+Thus, only certain attributes were chosen for the OSWS ontology.
+They include name, category, likes, birthday, location,
+current_location, hometown, plus affiliation for the category
+“athlete,” and genre and record_label for the category
+“musician/band.” These attributes needed data cleaning before
+including them in the OSWS ontology. The process of cleaning
+and standardizing the values of those attributes is now explained.
+In our analysis of the selected 588 people in the reduced-A-list,
+234 people have slightly different names in their Facebook pages
+than in the list, but the search returns them anyway. This problem
+mainly results from three sources. The first is the use of Unicode
+characters in names and the second is the occurrence of middle
+initials. (The name list contains only first and last names.)
+Besides, some pages are titled with names containing a nickname
+(e.g., “X-Man Toney Freeman”) or additional information (e.g.,
+“Lynne Curtin of Real Housewife of Orange County”).
+To solve these problems, firstly a normalization algorithm was
+applied to transform Unicode characters into equivalent text in
+English letters. Thus, “Penélope Cruz” became “Penelope Cruz.”
+To remove the nicknames and any irrelevant information, the
+names were trimmed so as to keep only the first name, last name
+and text in between. Exceptions were made when the last names
+are followed by “jr,” “sr” and numbers such as “II.” If the last
+name is immediately followed by a dash (“-”), the word after it is
+kept. This allows names such as “Kimberly Williams-Paisley.”
+The text between the first and last name (if any) is generally the
+person’s middle name or initial. However, in some cases, the page
+creator added the person’s nickname between the first and last
+name. Examples include DeAndre “Touchdown” Brown, and
+Hector “Macho” Camacho. It may be noticed that the nicknames
+always appear between delimiters. Thus, all such text between
+delimiters was removed. If none of the above solutions solved the
+mismatch problem, which occurred only in a few cases, the
+original names from the reduced-A-list were kept. The values of
+the attribute birthday were standardized in the format “Month DD
+YYYY.” “Month” stands for the name of the month (e.g., May).
+A further review of the data showed that the attributes location
+and current_location convey the same information: the place
+where the famous person stays at. To be consistent with the
+previous OSWS ontology [5], only the city, state (if within the
+USA) and country of the well defined attribute location were
+saved. The value of the attribute current_location, on the other
+hand, does not have a standard style. A person living in Los
+Angeles, California may have the current_location “Los Angeles,
+CA” or “Los Angeles, California, USA.” This does not cause a
+problem when serving as a suggested completion. However, a few
+cases appear to show “nonsense” information. Common examples
+include locations such as “all over,” “home” and “in the world.”
+One way to solve this problem is to pass the returned locations
+back to a search engine. If one of the top (five) results shows a
+link from an official map site, such as map.google.com, then this
+value is a valid location. An alternative method is to filter the
+locations with a list of stop words. Words such as “all over” and
+“home,” typically do not appear in a valid location. Thus, a
+manual check of the locations of the reduced-A-list was
+performed and a stop word list was constructed. The values of the
+attribute hometown were cleaned using the same method.
+The attribute category is the most useful attribute for suggested
+completions in order to disambiguate homonyms, yet cleaning it
+causes the most complications. As mentioned, there are 24 person
+categories in Facebook. Most of them can be mapped directly to
+the previous OSWS ontology [5]. “Athlete” is one of the biggest
+categories in Facebook. In the DBpedia ontology [18], the class
+“athlete” is classified into 22 subcategories, such as
+“BaseballPlayer,” “BasketballPlayer,” “Boxer,” etc. To serve the
+purpose of providing suggestions for homonyms, it helps to
+subdivide the Facebook “athlete” category to provide more
+specific information. Thus, additional information was extracted
+from the attributes bio, description, personal_info and affiliation,
+if available. By checking for matches with the subcategories of
+athlete, we could specify 51 people playing specific sports.
+Facebook uses the category “actor/director.” To determine if a
+famous person is an actor or a director, it was again necessary to
+rely on the attributes bio, description and personal_info. If the
+word “actor” or “actress” or “director” was found in those
+attributes, the person was classified as such. If the person was
+mentioned as actor and director, the category that first appears
+was used. If none of these words was found, the person was
+classified as actor, as there are more actors than directors. A
+similar analysis was performed for the category “musician/band.”
+Another problematic category is “public figure.” Any famous
+person that cannot be categorized as one of the other 23 person
+categories could be included in “public figure.” Among the 588
+selected people in the reduced-A-list, 164 are classified as “public
+figure.” “Category” is considered the most important search
+suggestion in the OSWS System, because it disambiguates
+homonyms by their occupations. However, having “public figure”
+in the suggested continuation does not help much. Thus, it was
+necessary to extract “what the famous person does” and “who the
+famous person is” from attributes, such as bio, or description.
+During the study, we discovered that some Facebook descriptions
+were copied from Wikipedia. Thus, the person’s occupation was
+extracted by analyzing the Wikipedia abstract. Non-Wikipedia
+descriptions were checked against a list of occupations generated
+in this research. This list contains the other 23 person categories in
+Facebook, class and subclass names in the DBpedia ontology, and
+their synonyms in WordNet [19]. The synonyms were retrieved
+using a Synonym API [20]. If more than one occupation was
+found, the first one was chosen. By using this method, it was
+possible to assign detailed occupation information to 52 famous
+people in the “public figure” category. “Musician” and “athlete”
+are two of the largest categories in both the DBpedia ontology and
+among the Facebook person categories. The attributes affiliation
+for athletes and genre and record_label for musicians were kept.
+2.3 Mapping Facebook to DBpedia Ontology
+To integrate the Facebook data into the OSWS ontology, it was
+necessary to find a way to effectively map the Facebook attributes
+to the DBpedia ontology. We started with mapping the Facebook
+person categories to the hierarchy of the DBpedia ontology. It was
+found that more than half of the Facebook person categories could
+be mapped directly or indirectly by string and synonym matching
+to classes in the DBpedia ontology. Table 1 shows this mapping.
+The remaining Facebook attributes were also mapped to the
+OSWS ontology. Details of are omitted due to space limitations.
+The Facebook number of likes provides a measurement for the
+popularity of a person. Thus, a new property “facebookLikes” was
+created in OSWS to store this information. Similarly, another new
+object property “currentPlace” was added to store the data of the
+Facebook attributes location and current_location. The Facebook
+attribute affiliation for athletes was mapped to several properties
+in the OSWS ontology, including “playsForBasketballTeam,” and
+“playsForSoccerTeam,” depending on the type of sports of the
+athlete. If the kind of sport was not specified, a new property
+“playsforTeam” was created to store the affiliation information.
+Table 1. Facebook to DBpedia mapping
+Facebook Person Category DBpedia Ontology Class
+Actor Actor
+Artist Artist
+Athlete Athlete
+Author Writer
+Coach CollegeCoach
+Comedian Comedian
+Editor Writer
+Fictional Character FictionalCharacter
+Government Official Governor
+Journalist Journalist
+Monarch Monarch
+Musician MusicalArtist
+Politician Politician
+Public Figure Celebrity
+Writer Writer
+3. CONCLUSIONS AND FUTURE WORK
+The study presented in this paper shows that a social network can
+be used as a source of information for mixed human-computer
+ontology construction, at least in the specialized domain of
+“famous people.” Facebook was mined as a secondary source to
+enhance the OSWS famous people ontology. The study focused
+on the 2,564 names that exist in the A-List but could not be found
+in DBpedia. It was possible to find 954 names that have a
+Facebook public page and are classified as persons. The process
+of extending the OSWS ontology involved a mix of programmatic
+data analysis and manual checking. In total, 584 additional
+famous people from the A-List were added to the OSWS
+Ontology, including 263 artists, 109 athletes, 109 celebrities and
+26 politicians. The remaining 77 people are from 14 categories
+covering a wide range, including one monarch and one judge.
+Much work remains to be done. The A-list is fairly small and
+more famous people should be considered. The extensibility of the
+described methods to other social networks needs to be
+investigated. Facebook was only brought in as additional source
+“after the fact.” It would be interesting to see whether using
+DBpedia in tandem with Facebook and newer information sources
+such as Linked Open Data leads to better results. A correctness
+evaluation was only performed for a small random sample.
+Information in the likes attribute is highly dynamic, yet we treated
+it as static. Automatic update methods are needed for this issue.
+4. ACKNOWLEDGMENTS
+Christopher Ochs has worked on the implementation of OSWS.
+REFERENCES
+[1] D.R. Radev, W. Fan, and Z. Zhang, “WebInEssence: A
+Personalized Web-Based Multi-Document Summarization
+and Recommendation System”, NAACL Workshop on
+Automatic Summarization, Pittsburgh, PA, 2001.
+[2] T. Tian, J. Geller, S.A. Chun, “Improving Web Search
+Results for Homonyms by Suggesting Completions from an
+Ontology,” 2nd ICWE Workshop on Semantic Web
+Information Management (SWIM), Vienna, Austria. Lecture
+Notes in Computer Science 6385, pp. 175-186, 2010.
+[3] T. Tian, J. Geller, S.A. Chun, “Enhancing Interface for
+Ontology-Supported Homonym Search,” CAiSe’11
+Workshop on Semantic Web Search (SSW), London, UK,
+2011. Lecture Notes in Business Information Processing,
+issue 83, pp. 544-553, Springer Verlag, Berlin, 2011.
+[4] DBpedia, http://dbpedia.org, retrieved 12/01/2011.
+[5] C. Ochs, T. Tian, J. Geller, S.A. Chun, “Google Knows Who
+is Famous Today: Building an Ontology from Search Engine
+Knowledge and DBpedia,” 5th IEEE International Conf. on
+Semantic Computing (ICSC), Palo Alto, CA, 2011.
+[6] Facebook, www.facebook.com, retrieved 12/01/2011.
+[7] D.M. Boyd, N.B. Ellison, “Social Network Sites: Definition,
+History, and Scholarship,” Journal of Computer-Mediated
+Communication, vol. 13, issue 1, pp. 210-230, 2007.
+[8] M. Thelwall, D. Wilkinson, S. Uppal, “Data Mining Emotion
+in Social Network Communication: Gender Differences in
+MySpace,” Journal of the American Society for Information
+Science and Technology, vol. 61, issue 1, pp. 190-199, 2010.
+[9] H. Chu, D. Deng, J.H. Park, “Live Data Mining Concerning
+Social Networking Forensics Based on a Facebook Session
+Through Aggregation of Social Data,” IEEE Journal of
+Selected Areas in Communications, vol. 29, issue 7, pp.
+1368-1376, 2011.
+[10] K. Xu, S.S. Liao, Y. Song, L. Liu, “Mining User Opinions in
+Social Network Webs,” The 4th China Summer Workshop on
+Information Management, Wuhan, China, 2010.
+[11] I. Guy, M. Jacovi, E. Shahar, N. Meshulam, V. Soroka,
+“Harvesting with SONAR - The Value of Aggregating Social
+Network Information,” CHI, Florence, Italy, 2008.
+[12] Y. Matsuo, J. Mori, M. Hamasaki, “POLYPHONET: An
+Advanced Social Network Extraction System from the Web,”
+Int. World Wide Web Conf., Edinburgh, Scotland, 2006.
+[13] About Facebook Pages, http://www.facebook.com/help/
+pages/admin, retrieved 12/01/2011.
+[14] Facebook Graph API, http://developers.facebook.com/
+docs/reference/api/, retrieved 12/01/2011.
+[15] Inside Facebook Pages, http://www.sysomos.com/
+insidefacebook/, retrieved 12/01/2011.
+[16] T. McCorkindale, “Can You See the Writing on My Wall? A
+Content Analysis of the Fortune 50’s Facebook Social
+Networking Sites,” Public Relations Jour., 4(3), 1-10, 2010.
+[17] Facebook Pages, http://developers.facebook.com/
+docs/reference/api/page/, retrieved 12/01/2011.
+[18] S. Auer, C. Bizer, G. Kobilarov, J. Lehmann, R. Cyganiak,
+Z. Ives, “DBpedia: a Nucleus for a Web of Open Data,”
+ISWC'07/ASWC'07 6th International Semantic Web and 2nd
+Asian Conference on Asian Semantic Web, Busan, Korea,
+pp. 722-735, 2007.
+[19] WordNet, http://wordnet.princeton.edu/, retrieved
+12/01/2012.
+[20] Stands4 API, http://www.abbreviations.com/api.asp,
+retrieved 12/01/2011.
