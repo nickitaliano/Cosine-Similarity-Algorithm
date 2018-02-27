@@ -14,7 +14,7 @@ import os
 
 # Set chrwd
 cwd = os.getcwd()
-os.chdir("/Users/NMAI/Desktop/NetBeansProjects")
+os.chdir("/YOUR/HOME/DIRECTORY/FOR/PROJECTS")
 
     
 # Input text
