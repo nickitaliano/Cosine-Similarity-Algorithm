@@ -19,7 +19,7 @@ import subprocess as sp
 
 # Set cwd
 cwd = os.getcwd()
-os.chdir("/Users/NMAI/Desktop/NetBeansProjects")
+os.chdir("/YOUR/FAVORITE/WORKING/DIRECTORY")
     
 # Input text
 t1 = open('doc1.txt', 'r',encoding='utf8', errors='replace')#function designated for frequency
